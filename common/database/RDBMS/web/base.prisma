@@ -1,0 +1,14 @@
+// This is your Prisma schemas file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}

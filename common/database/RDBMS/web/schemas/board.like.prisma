@@ -1,0 +1,51 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id         String      @id
+  boardLikes BoardLike[]
+}
+
+model BoardPost {
+  id         String      @id
+  boardLikes BoardLike[]
+}
+
+model BoardComment {
+  id         String      @id
+  boardLikes BoardLike[]
+}
+
+model BoardReply {
+  id         String      @id
+  boardLikes BoardLike[]
+}
+
+model BoardLike {
+  id         String        @id @default(uuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  entityType String        @default("Post") @db.VarChar(20)
+  entityId   String
+  postId     String?
+  post       BoardPost?    @relation(fields: [postId], references: [id])
+  commentId  String?
+  comment    BoardComment? @relation(fields: [commentId], references: [id])
+  replyId    String?
+  reply      BoardReply?   @relation(fields: [replyId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([userId, entityId])
+  @@index([entityType, userId])
+  @@map("BoardLikes")
+}

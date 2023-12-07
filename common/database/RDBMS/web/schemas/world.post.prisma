@@ -1,0 +1,42 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id         String      @id
+  worldPosts WorldPost[]
+}
+
+model WorldPost {
+  id                String   @id @default(uuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id])
+  category          String   @db.VarChar(20)
+  mapGUID           String
+  tag               String   @db.Text
+  title             String   @db.Text
+  summary           String   @db.Text
+  content           String   @db.Text
+  playCount         Int      @default(0)
+  commentCount      Int      @default(0)
+  likeCount         Int      @default(0)
+  thumbnailImageUrl Json?    @default("[]")
+  status            String   @default("ALIVE") @db.VarChar(20)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([category, status])
+  @@fulltext([title])
+  @@fulltext([tag])
+  @@fulltext([summary])
+  @@fulltext([summary, title, tag])
+  @@map("WorldPosts")
+}

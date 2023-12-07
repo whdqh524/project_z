@@ -1,0 +1,32 @@
+{
+  "name": "zemiverse_web_backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "preinstall": "pnpm dlx only-allow pnpm",
+    "auth": "pnpm -F @zemiverse_web_backend/servers/auth",
+    "admin": "pnpm -F @zemiverse_web_backend/servers/admin",
+    "community": "pnpm -F @zemiverse_web_backend/servers/community",
+    "studio": "pnpm -F @zemiverse_web_backend/servers/studio",
+    "common": "pnpm -F @zemiverse_web_backend/common"
+  },
+  "engines": {
+    "node": ">=18.18.1",
+    "pnpm": ">=8.9.0"
+  },
+  "workspaces": [
+    "servers/*",
+    "common"
+  ],
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@8.9.0",
+  "devDependencies": {
+    "pnpm": "^8.9.0",
+    "ts-loader": "^9.5.0"
+  }
+}

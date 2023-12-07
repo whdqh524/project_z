@@ -1,0 +1,12 @@
+{
+  "mixers": [
+    {
+      "input": [
+        "./database/RDBMS/web/base.prisma",
+        "./database/RDBMS/web/schemas/*"
+      ],
+      "output": "./database/RDBMS/web/schema.prisma"
+    }
+  ],
+  "runMigrationsOnStart": true
+}

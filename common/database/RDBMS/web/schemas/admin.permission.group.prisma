@@ -1,0 +1,18 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model AdminPermissionGroup {
+  id   String @id @default(uuid())
+  name String @unique
+
+  @@map("AdminPermissionGroups")
+}

@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE `WorldPosts` MODIFY `mapGUID` VARCHAR(191) NOT NULL;

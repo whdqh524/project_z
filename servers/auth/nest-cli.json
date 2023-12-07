@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json.schemastore.org/nest-cli",
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "src",
+  "compilerOptions": {
+    "outDir": "../../dist/servers/auth",
+    "deleteOutDir": true,
+    "webpack": true
+  }
+}

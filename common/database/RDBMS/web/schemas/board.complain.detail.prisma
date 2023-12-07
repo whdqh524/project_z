@@ -1,0 +1,57 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id                   String                @id
+  boardComplainDetails BoardComplainDetail[]
+}
+
+model BoardPost {
+  id                   String                @id
+  boardComplainDetails BoardComplainDetail[]
+}
+
+model BoardComment {
+  id                   String                @id
+  boardComplainDetails BoardComplainDetail[]
+}
+
+model BoardReply {
+  id                   String                @id
+  boardComplainDetails BoardComplainDetail[]
+}
+
+model BoardComplain {
+  id                   String                @id
+  boardComplainDetails BoardComplainDetail[]
+}
+
+model BoardComplainDetail {
+  id              String        @id @default(uuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  boardComplainId String
+  boardComplain   BoardComplain @relation(fields: [boardComplainId], references: [id])
+  reason          String        @db.VarChar(20)
+  content         String        @db.Text
+  postId          String?
+  post            BoardPost?    @relation(fields: [postId], references: [id])
+  commentId       String?
+  comment         BoardComment? @relation(fields: [commentId], references: [id])
+  replyId         String?
+  reply           BoardReply?   @relation(fields: [replyId], references: [id])
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([userId, boardComplainId])
+  @@map("BoardComplainDetails")
+}

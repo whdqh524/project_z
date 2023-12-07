@@ -1,0 +1,53 @@
+{
+  "apps": [
+    {
+      "name": "Auth Server",
+      "cwd": "servers/auth/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "File Server",
+      "cwd": "servers/file/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "Community Server",
+      "cwd": "servers/community/src",
+      "script": "ts-node main.ts --inspect",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "News Server",
+      "cwd": "servers/news/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "World Server",
+      "cwd": "servers/world/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "admin Server",
+      "cwd": "servers/admin/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    },
+    {
+      "name": "Demo Server",
+      "cwd": "servers/demo/src",
+      "script": "ts-node main.ts",
+      "watch": false,
+      "autorestart": false
+    }
+  ]
+}

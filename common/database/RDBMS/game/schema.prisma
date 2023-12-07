@@ -1,0 +1,39 @@
+// This is your Prisma schemas file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider      = "prisma-client-js"
+  output        = "./prisma/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("GAME_DATABASE_URL")
+}
+
+model GameAccount {
+  ACGUID   String  @id
+  ID       String  @unique @db.Char(48)
+  platform Int     @default(0) @db.TinyInt
+  token    String?
+
+  @@map("account")
+}
+
+model GameAvatar {
+  CHGUID   String  @id
+  ACGUID   String
+  nickname String?
+
+  @@map("characters")
+}
+
+model GameMap {
+  map_index       Int     @id
+  mapGUID         String?
+  mapname         String? @db.Char(255)
+  map_displayname String? @db.Char(255)
+
+  @@map("maplist_info")
+}

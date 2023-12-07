@@ -1,0 +1,44 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model WorldPost {
+  id             String         @id
+  worldComplains WorldComplain?
+}
+
+model WorldComment {
+  id             String         @id
+  worldComplains WorldComplain?
+}
+
+model WorldReply {
+  id             String         @id
+  worldComplains WorldComplain?
+}
+
+model WorldComplain {
+  id         String        @id @default(uuid())
+  entityType String        @db.VarChar(20)
+  entityId   String
+  process    Boolean       @default(false)
+  postId     String?       @unique
+  post       WorldPost?    @relation(fields: [postId], references: [id])
+  commentId  String?       @unique
+  comment    WorldComment? @relation(fields: [commentId], references: [id])
+  replyId    String?       @unique
+  reply      WorldReply?   @relation(fields: [replyId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([entityType, entityId])
+  @@map("WorldComplains")
+}

@@ -1,0 +1,40 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id        String     @id
+  adminUser AdminUser?
+}
+
+model AdminPermissionGroup {
+  id         String      @id
+  adminUsers AdminUser[]
+}
+
+model AdminUser {
+  id                     String                @id @default(uuid())
+  accountId              String                @unique
+  password               String                @db.VarChar(64)
+  name                   String                @unique @db.VarChar(20)
+  userId                 String                @unique
+  user                   User                  @relation(fields: [userId], references: [id])
+  salt                   String                @db.VarChar(32)
+  department             String?
+  adminPermissionGroupId String?
+  adminPermissionGroup   AdminPermissionGroup? @relation(fields: [adminPermissionGroupId], references: [id])
+  status                 String                @default("ALIVE") @db.VarChar(20)
+  accessedAt             DateTime?
+  createdAt              DateTime              @default(now())
+  updatedAt              DateTime              @updatedAt
+
+  @@map("AdminUsers")
+}

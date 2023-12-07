@@ -1,0 +1,44 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model BoardPost {
+  id             String         @id
+  boardComplains BoardComplain?
+}
+
+model BoardComment {
+  id             String         @id
+  boardComplains BoardComplain?
+}
+
+model BoardReply {
+  id             String         @id
+  boardComplains BoardComplain?
+}
+
+model BoardComplain {
+  id         String        @id @default(uuid())
+  entityType String        @db.VarChar(20)
+  entityId   String
+  process    Boolean       @default(false)
+  postId     String?       @unique
+  post       BoardPost?    @relation(fields: [postId], references: [id])
+  commentId  String?       @unique
+  comment    BoardComment? @relation(fields: [commentId], references: [id])
+  replyId    String?       @unique
+  reply      BoardReply?   @relation(fields: [replyId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([entityType, entityId])
+  @@map("BoardComplains")
+}

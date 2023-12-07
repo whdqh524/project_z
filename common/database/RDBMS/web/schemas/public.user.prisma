@@ -1,0 +1,33 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id                 String   @id @default(uuid())
+  platform           Int      @default(1) // GOOGLE=1, APPLE=2, FACEBOOK=3
+  oauthId            String   @db.VarChar(50)
+  email              String?
+  sns                Json?
+  nickname           String   @unique
+  name               String?
+  summary            String?
+  profileImageUrl    String?
+  backgroundType     String   @default("COLOR") @db.VarChar(20)
+  backgroundColor    String?  @db.VarChar(10)
+  backgroundImageUrl String?
+  status             String   @default("ALIVE") @db.VarChar(20)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([oauthId])
+  @@index([nickname])
+  @@map("Users")
+}

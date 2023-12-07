@@ -1,0 +1,45 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id         String      @id
+  boardPosts BoardPost[]
+}
+
+model BoardPost {
+  id                String    @id @default(uuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id])
+  board             String    @db.VarChar(20)
+  category          String    @db.VarChar(20)
+  title             String    @db.Text
+  summary           String?   @db.Text
+  content           String    @db.Text
+  views             Int       @default(0)
+  commentCount      Int       @default(0)
+  likeCount         Int       @default(0)
+  thumbnailImageUrl String?
+  isExposed         Boolean   @default(true)
+  isFixed           Boolean   @default(false)
+  status            String    @default("ALIVE") @db.VarChar(20)
+  assignedAt        DateTime  @default(now())
+  startDate         DateTime?
+  endDate           DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([board, category, status, isFixed, isExposed])
+  @@fulltext([title])
+  @@fulltext([content])
+  @@fulltext([title, content])
+  @@map("BoardPosts")
+}

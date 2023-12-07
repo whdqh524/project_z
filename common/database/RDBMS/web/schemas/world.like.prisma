@@ -1,0 +1,51 @@
+generator client {
+  provider        = "prisma-client-js"
+  output          = "./prisma/client"
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
+  binaryTargets   = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("WEB_DATABASE_URL")
+}
+
+model User {
+  id         String      @id
+  worldLikes WorldLike[]
+}
+
+model WorldPost {
+  id         String      @id
+  worldLikes WorldLike[]
+}
+
+model WorldComment {
+  id         String      @id
+  worldLikes WorldLike[]
+}
+
+model WorldReply {
+  id         String      @id
+  worldLikes WorldLike[]
+}
+
+model WorldLike {
+  id         String        @id @default(uuid())
+  userId     String
+  user       User          @relation(fields: [userId], references: [id])
+  entityType String        @db.VarChar(20)
+  entityId   String
+  postId     String?
+  post       WorldPost?    @relation(fields: [postId], references: [id])
+  commentId  String?
+  comment    WorldComment? @relation(fields: [commentId], references: [id])
+  replyId    String?
+  reply      WorldReply?   @relation(fields: [replyId], references: [id])
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@unique([userId, entityId])
+  @@index([entityType, userId])
+  @@map("WorldLikes")
+}
